@@ -51,10 +51,10 @@
 
 // default values
 
-#define D_SHUNT            0.25
-#define D_V_BUS_MAX        6
-#define D_V_SHUNT_MAX        0.3
-#define D_I_MAX_EXPECTED    1
+#define D_SHUNT            0.1
+#define D_V_BUS_MAX        32
+#define D_V_SHUNT_MAX      0.2
+#define D_I_MAX_EXPECTED   2
 
 
 class INA219
@@ -140,7 +140,7 @@ class INA219
     		        );
 
     /// Config values (range, gain, bus adc, shunt adc, mode).
-    void configure( t_range range   = RANGE_16V,   ///< Range for bus voltage.
+    void configure( t_range range   = RANGE_32V,   ///< Range for bus voltage.
     		        t_gain gain     = GAIN_8_320MV,///< Set Gain for shunt voltage.
     		        t_adc bus_adc   = ADC_12BIT,   ///< Configure bus voltage conversion.
     		        t_adc shunt_adc = ADC_12BIT,   ///< Configure shun voltage conversion.

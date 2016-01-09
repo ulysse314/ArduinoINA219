@@ -60,6 +60,8 @@ INA219::INA219(t_i2caddr addr): i2c_address(addr) {
 
 void INA219::begin() {
     Wire.begin();
+    configure();
+    calibrate();
 }
 
 void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, float i_max_expected) {
