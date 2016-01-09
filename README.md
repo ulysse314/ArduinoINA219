@@ -1,3 +1,13 @@
+TI INA219 hi-side i2c current/power monitor Library for Arduino
+===============================================================
+"Under Construction"
+Quite much small changes to Johns's original lib mostly documentation and
+C++ "mambo jambo" Doxy documentation etc. 
+One major change / fix:
+calibrate() function fixed to give correct ratings.
+
+
+
 /******************************************************************************
 * TI INA219 hi-side i2c current/power monitor Library for Arduino
 *
