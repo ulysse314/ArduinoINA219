@@ -78,9 +78,10 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
     current_lsb = min_lsb;
     digits=0;
 
-    /* From datasheet: This value was selected to be a round number near the Minimum_LSB. This selection allows for good resolution with a rounded LSB.
-	 * eg. 0.000610 -> 0.000700
-	*/
+    /* From datasheet: This value was selected to be a round number near the Minimum_LSB.
+     * This selection allows for good resolution with a rounded LSB.
+	   * eg. 0.000610 -> 0.000700
+	   */
     while( current_lsb > 0.0 ){//If zero there is something weird...
         if( (uint16_t)current_lsb / 1){
         	current_lsb = (uint16_t) current_lsb + 1;
@@ -119,7 +120,7 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
       Serial.print("max_before_overflow:       "); Serial.println(max_before_overflow,8);
       Serial.print("max_shunt_v_before_overflow:       "); Serial.println(max_shunt_v_before_overflow,8);
       Serial.print("max_power:       "); Serial.println(max_power,8);
-
+      Serial.println("  ");
 #endif
       write16(CAL_R, cal);
 
@@ -159,6 +160,10 @@ float INA219::busVoltage() const {
   temp = read16(V_BUS_R);
   temp >>= 3;
   return (temp * 0.004);
+}
+
+int16_t INA219::shuntCurrentRaw() const {
+  return (read16(I_SHUNT_R));
 }
 
 float INA219::shuntCurrent() const {
