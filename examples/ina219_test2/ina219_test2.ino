@@ -1,6 +1,6 @@
 /**********************************************
 * INA219 library example
-* 10 May 2012 by johngineer
+* 9 January 2016 by Flavius Bindea
 *
 * this code is public domain.
 **********************************************/
@@ -9,22 +9,28 @@
 #include <Wire.h>
 #include <INA219.h>
 
-INA219 monitor;
+#define SHUNT_MAX_V 0.04  /* Rated max for our shunt is 75mv for 50 A current: 
+                             we will mesure only up to 20A so max is about 75mV*20/50 lets put some more*/
+#define BUS_MAX_V   16.0  /* with 12v lead acid battery this should be enough*/
+#define MAX_CURRENT 20    /* In our case this is enaugh even shunt is capable to 50 A*/
+#define SHUNT_R   0.015   /* Shunt resistor in ohm */
 
+INA219 monitor;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(57600);
   monitor.begin();
-  // configure with default values RANGE_16V, GAIN_8_320MV, ADC_12BIT, ADC_12BIT, CONT_SH_BUS
-  monitor.configure(); 
-  // calibrate with default values D_SHUNT=0.25, D_V_BUS_MAX=6, D_V_SHUNT_MAX=0.3, D_I_MAX_EXPECTED=1
-  monitor.calibrate(); 
+  // setting up our configuration
+  // default values are RANGE_16V, GAIN_8_320MV, ADC_12BIT, ADC_12BIT, CONT_SH_BUS
+  monitor.configure(INA219::RANGE_32V, INA219::GAIN_2_80MV, INA219::ADC_64SAMP, INA219::ADC_64SAMP, INA219::CONT_SH_BUS);
+  
+  // calibrate with our values
+  monitor.calibrate(SHUNT_R, SHUNT_MAX_V, BUS_MAX_V, MAX_CURRENT);
 }
 
 void loop()
 {
-
   Serial.println("******************");
   
   Serial.print("raw shunt voltage: ");
@@ -54,8 +60,7 @@ void loop()
   Serial.println(" ");
   Serial.println(" ");
   
-  delay(10000);
-
+  delay(1000);
 }
 
 
