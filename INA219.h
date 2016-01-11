@@ -61,19 +61,19 @@ class INA219
 {
   public:
 
-	///I2C address definations.
-	/// Adafruit breakout board have two jumppers to set unique
-	/// address for each board ( in case there is more than one in Your system)
-	/// base address is 0x40, no jumpers needed)
-	enum t_i2caddr{
-		I2C_ADDR_40 = 0x40, ///< address 0x40 no jumpers required.
-		I2C_ADDR_41 = 0x41, ///< address 0x41 bridge A0.
-		I2C_ADDR_44 = 0x44, ///< address 0x44 bridge A1.
-		I2C_ADDR_45 = 0x45 ///< address 0x45 bridge A0 & A1.
+    ///I2C address definations.
+    /// Adafruit breakout board have two jumppers to set unique
+    /// address for each board ( in case there is more than one in Your system)
+    /// base address is 0x40, no jumpers needed)
+    enum t_i2caddr{
+      I2C_ADDR_40 = 0x40, ///< address 0x40 no jumpers required.
+      I2C_ADDR_41 = 0x41, ///< address 0x41 bridge A0.
+      I2C_ADDR_44 = 0x44, ///< address 0x44 bridge A1.
+      I2C_ADDR_45 = 0x45 ///< address 0x45 bridge A0 & A1.
 
-	};
+    };
 
-	///Sets PGA gain and range. Note that the PGA defaults to ÷8 (320mV range).
+    ///Sets PGA gain and range. Note that the PGA defaults to ÷8 (320mV range).
     ///Configuration reister bits 11, 12 are used for this.
     enum t_gain{
         GAIN_1_40MV = 0,
@@ -123,7 +123,7 @@ class INA219
         CONT_BUS    = 6, ///<Bus Continuous.
         CONT_SH_BUS = 7  ///<Shunt and Bus, Continuous.
     };
-
+    
     ///Constructor
     INA219( t_i2caddr addr = I2C_ADDR_40 ///< Device address.
     		);
@@ -154,7 +154,7 @@ class INA219
     int16_t shuntVoltageRaw() const;
 
     /// Returns raw bus voltage binary value.
-    int16_t busVoltageRaw() const;
+    int16_t busVoltageRaw();
 
     /// Returns raw current binary value.    
     int16_t shuntCurrentRaw() const;
@@ -163,7 +163,7 @@ class INA219
     float shuntVoltage() const;
 
     /// Returns the bus voltage in volts.
-    float busVoltage()const ;
+    float busVoltage();
 
     /// Returns the shunt current in amps.
     float shuntCurrent() const;
@@ -171,6 +171,18 @@ class INA219
     /// Returns the bus power in watts.
     float busPower() const;
 
+    /// Rewrites last config value to INA219 register
+    void reconfig() const;
+    
+    /// Rewrites last calibration value to INA219 register
+    void recalibrate() const;
+    
+    /// conversion is ready
+    bool ready() const;
+
+    /// conversion is ready
+    bool overflow() const;
+    
   private:
     /// INA219 memory registers.
     enum t_reg{
@@ -185,6 +197,8 @@ class INA219
     const uint8_t  i2c_address;
     float r_shunt, current_lsb, power_lsb;
     uint16_t config, cal;
+    bool _ready, _overflow;
+    uint16_t _bus_voltage_register;
 
     ///Read 16 word from given register address.
     int16_t read16( t_reg addr ///< Register address.

@@ -55,6 +55,9 @@ const uint8_t MODE2	= 1;
 const uint8_t MODE1	= 0;
 };
 
+#define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R 
+#define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R 
+
 INA219::INA219(t_i2caddr addr): i2c_address(addr) {
 }
 
@@ -118,7 +121,7 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
       Serial.print("power_lsb:     "); Serial.println(power_lsb, 8);
       Serial.println("  ");
       Serial.print("cal:           "); Serial.println(cal);
-      Serial.print("r_shunt:       "); Serial.println(r_shunt);
+      Serial.print("r_shunt:       "); Serial.println(r_shunt, 6);
       Serial.print("max_before_overflow:       "); Serial.println(max_before_overflow,8);
       Serial.print("max_shunt_v_before_overflow:       "); Serial.println(max_shunt_v_before_overflow,8);
       Serial.print("max_power:       "); Serial.println(max_power,8);
@@ -152,14 +155,17 @@ float INA219::shuntVoltage() const {
   return (temp / 100000);
 }
 
-int16_t INA219::busVoltageRaw() const {
-  return read16(V_BUS_R);
+int16_t INA219::busVoltageRaw() {
+  _bus_voltage_register = read16(V_BUS_R);
+  _overflow = bitRead(_bus_voltage_register, OVF_B);     // overflow bit
+  _ready    = bitRead(_bus_voltage_register, CNVR_B);    // ready bit
+  return _bus_voltage_register;
 }
 
 
-float INA219::busVoltage() const {
+float INA219::busVoltage() {
   int16_t temp;
-  temp = read16(V_BUS_R);
+  temp = busVoltageRaw();
   temp >>= 3;
   return (temp * 0.004);
 }
@@ -176,6 +182,66 @@ float INA219::busPower() const {
   return (read16(P_BUS_R) * power_lsb);
 }
 
+/**************************************************************************/
+/*! 
+    @brief  Rewrites the last config register
+*/
+/**************************************************************************/
+void INA219::reconfig() const {
+  write16(CONFIG_R, config);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  Rewrites the last calibration
+*/
+/**************************************************************************/
+void INA219::recalibrate() const {
+  write16(CAL_R, cal);
+}
+
+/**************************************************************************/
+/*! 
+    @brief  returns conversion ready bite from last bus voltage read
+    
+    @note page 30:
+          Although the data from the last conversion can be read at any time,
+          the INA219 Conversion Ready bit (CNVR) indicates when data from
+          a conversion is available in the data output registers.
+          The CNVR bit is set after all conversions, averaging, 
+          and multiplications are complete.
+          CNVR will clear under the following conditions:
+          1.) Writing a new mode into the Operating Mode bits in the 
+              Configuration Register (except for Power-Down or Disable)
+          2.) Reading the Power Register
+          
+          page 15:
+          The Conversion Ready bit clears under these
+          conditions:
+          1. Writing to the Configuration Register, except
+          when configuring the MODE bits for Power Down
+          or ADC off (Disable) modes;
+          2. Reading the Status Register;
+          3. Triggering a single-shot conversion with the
+          Convert pin.
+*/
+/**************************************************************************/
+bool INA219::ready() const {
+  return _ready;
+}
+
+/**************************************************************************/
+/*! 
+    @brief  returns overflow bite from last bus voltage read
+    
+    @note The Math Overflow Flag (OVF) is set when the Power or
+          Current calculations are out of range. It indicates that
+          current and power data may be meaningless.
+*/
+/**************************************************************************/
+bool INA219::overflow() const {
+  return _overflow;
+}
 
 /**********************************************************************
 *             INTERNAL I2C FUNCTIONS                  *
