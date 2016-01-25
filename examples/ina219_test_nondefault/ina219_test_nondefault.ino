@@ -22,8 +22,8 @@ void setup()
   Serial.begin(57600);
   monitor.begin();
   // setting up our configuration
-  // default values are RANGE_16V, GAIN_8_320MV, ADC_12BIT, ADC_12BIT, CONT_SH_BUS
-  monitor.configure(INA219::RANGE_32V, INA219::GAIN_2_80MV, INA219::ADC_64SAMP, INA219::ADC_64SAMP, INA219::CONT_SH_BUS);
+  // default values are RANGE_32V, GAIN_8_320MV, ADC_12BIT, ADC_12BIT, CONT_SH_BUS
+  monitor.configure(INA219::RANGE_16V, INA219::GAIN_2_80MV, INA219::ADC_64SAMP, INA219::ADC_64SAMP, INA219::CONT_SH_BUS);
   
   // calibrate with our values
   monitor.calibrate(SHUNT_R, SHUNT_MAX_V, BUS_MAX_V, MAX_CURRENT);
