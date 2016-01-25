@@ -43,11 +43,11 @@ in continuous conversion mode. All reads are from continous conversions.
 
 # Usage
 ## Basic
-Look at [ina219_test](example/ina219_test/ina219_test.ino) exemple sketch.
+Look at [ina219_test](examples/ina219_test/ina219_test.ino) exemple sketch.
 This example works out of the box for Adafruit's INA219 Breakout.
 
 Include defintions and define needed object:
-```
+```Arduino
 #include <Wire.h>
 #include <INA219.h>
 
@@ -55,12 +55,12 @@ INA219 monitor;
 ```
 
 In the `setup()` function initialise the INA219:
-```
+```Arduino
 monitor.begin();
 ```
 
 Then in the `loop()` function make calls to different functions that are returning the values:
-```
+```Arduino
   Serial.print("raw shunt voltage: ");
   Serial.println(monitor.shuntVoltageRaw());
   
@@ -91,7 +91,7 @@ If you want to use a different setup or if you do not use the Adafruit's breakou
 An exemple is in [ina219_test_nondefault](examples/ina219_test_nondefault/ina219_test_nondefault.ino).
 
 Extract of the `setup()` function:
-```
+```Arduino
   monitor.begin();
 
   // setting up our configuration
