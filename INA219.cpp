@@ -35,7 +35,15 @@
 ******************************************************************************/
 
 #include "INA219.h"
-#include <util/delay.h>
+
+#if defined(ESP8266)
+  #define _delay_ms(ms) delayMicroseconds((ms) * 1000)
+#endif
+
+#ifdef __avr__
+  #include <util/delay.h>
+#endif
+
 namespace{
 // config. register bit labels
 const uint8_t RST =	15;
