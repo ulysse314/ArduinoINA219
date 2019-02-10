@@ -151,7 +151,7 @@ void INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc sh
 #define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
 void INA219::reset(){
   write16(CONFIG_R, INA_RESET);
-  _delay_ms(5);
+  delay(5);
 }
 
 int16_t INA219::shuntVoltageRaw() const {
