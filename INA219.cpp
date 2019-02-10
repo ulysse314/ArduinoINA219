@@ -66,7 +66,7 @@ const uint8_t MODE1	= 0;
 #define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R 
 #define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R 
 
-INA219::INA219(t_i2caddr addr): i2c_address(addr) {
+INA219::INA219(uint8_t addr): i2c_address(addr) {
 }
 
 void INA219::begin() {

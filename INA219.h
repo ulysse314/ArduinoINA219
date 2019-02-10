@@ -60,19 +60,6 @@
 class INA219
 {
   public:
-
-    ///I2C address definations.
-    /// Adafruit breakout board have two jumppers to set unique
-    /// address for each board ( in case there is more than one in Your system)
-    /// base address is 0x40, no jumpers needed)
-    enum t_i2caddr{
-      I2C_ADDR_40 = 0x40, ///< address 0x40 no jumpers required.
-      I2C_ADDR_41 = 0x41, ///< address 0x41 bridge A0.
-      I2C_ADDR_44 = 0x44, ///< address 0x44 bridge A1.
-      I2C_ADDR_45 = 0x45 ///< address 0x45 bridge A0 & A1.
-
-    };
-
     ///Sets PGA gain and range. Note that the PGA defaults to ÷8 (320mV range).
     ///Configuration reister bits 11, 12 are used for this.
     enum t_gain{
@@ -125,8 +112,8 @@ class INA219
     };
     
     ///Constructor
-    INA219( t_i2caddr addr = I2C_ADDR_40 ///< Device address.
-    		);
+    INA219( uint8_t addr = 0x40 ///< Device address.
+               );
 
     /// Start i2 communication with actual device.
     void begin( );
