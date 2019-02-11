@@ -70,7 +70,6 @@ INA219::INA219(uint8_t addr): i2c_address(addr) {
 }
 
 void INA219::begin() {
-    Wire.begin();
     configure();
     calibrate();
 }
