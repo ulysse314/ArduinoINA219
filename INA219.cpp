@@ -69,12 +69,11 @@ const uint8_t MODE1	= 0;
 INA219::INA219(uint8_t addr): i2c_address(addr) {
 }
 
-void INA219::begin() {
-    configure();
-    calibrate();
+bool INA219::begin() {
+    return configure() && calibrate();
 }
 
-void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, float i_max_expected) {
+bool INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, float i_max_expected) {
     uint16_t digits;
     float i_max_possible, min_lsb, max_lsb, swap;
 
@@ -134,60 +133,86 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
       Serial.print("max_power:       "); Serial.println(max_power,8);
       Serial.println("  ");
 #endif
-      write16(CAL_R, cal);
+      return write16(CAL_R, cal);
 }
 
-void INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc shunt_adc,  t_mode mode) {
+bool INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc shunt_adc,  t_mode mode) {
   config = 0;
 
   config |= (range << BRNG | gain << PG0 | bus_adc << BADC1 | shunt_adc << SADC1 | mode);
 #if (INA219_DEBUG == 1)
   Serial.print("Config: 0x"); Serial.println(config,HEX);
 #endif
-  write16(CONFIG_R, config);
+  return write16(CONFIG_R, config);
 }
 
 #define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
-void INA219::reset(){
-  write16(CONFIG_R, INA_RESET);
+bool INA219::reset(){
+  bool result = write16(CONFIG_R, INA_RESET);
   delay(5);
+  return result;
 }
 
-int16_t INA219::shuntVoltageRaw() const {
-  return read16(V_SHUNT_R);
+bool INA219::shuntVoltageRaw(int16_t *value) const {
+  return read16(V_SHUNT_R, value);
 }
 
-float INA219::shuntVoltage() const {
-  float temp;
-  temp = read16(V_SHUNT_R);
-  return (temp / 100000);
+bool INA219::shuntVoltage(float *voltage) const {
+  int16_t value;
+  bool result = read16(V_SHUNT_R, &value);
+  if (voltage) {
+    *voltage = (value / 100000);
+  }
+  return result;
 }
 
-int16_t INA219::busVoltageRaw() {
-  _bus_voltage_register = read16(V_BUS_R);
-  _overflow = bitRead(_bus_voltage_register, OVF_B);     // overflow bit
-  _ready    = bitRead(_bus_voltage_register, CNVR_B);    // ready bit
-  return _bus_voltage_register;
+bool INA219::busVoltageRaw(int16_t *value) {
+  int16_t busVoltageRegister;
+  bool result = read16(V_BUS_R, &busVoltageRegister);
+  _overflow = bitRead(busVoltageRegister, OVF_B);     // overflow bit
+  _ready    = bitRead(busVoltageRegister, CNVR_B);    // ready bit
+  if (value) {
+    *value = busVoltageRegister;
+  }
+  return result;
 }
 
 
-float INA219::busVoltage() {
-  int16_t temp;
-  temp = busVoltageRaw();
-  temp >>= 3;
-  return (temp * 0.004);
+bool INA219::busVoltage(float *voltage) {
+  int16_t value;
+  bool result = busVoltageRaw(&value);
+  if (voltage) {
+    value >>= 3;
+    *voltage = (value * 0.004);
+  }
+  return result;
 }
 
-int16_t INA219::shuntCurrentRaw() const {
-  return (read16(I_SHUNT_R));
+bool INA219::shuntCurrentRaw(int16_t *current) const {
+  int16_t value;
+  bool result = read16(I_SHUNT_R, &value);
+  if (current) {
+    *current = value;
+  }
+  return result;
 }
 
-float INA219::shuntCurrent() const {
-  return (read16(I_SHUNT_R) * current_lsb);
+bool INA219::shuntCurrent(float *current) const {
+  int16_t value;
+  bool result = read16(I_SHUNT_R, &value);
+  if (current) {
+    *current = value * current_lsb;
+  }
+  return result;
 }
 
-float INA219::busPower() const {
-  return (read16(P_BUS_R) * power_lsb);
+bool INA219::busPower(float *voltage) const {
+  int16_t value;
+  bool result = read16(P_BUS_R, &value);
+  if (voltage) {
+    *voltage = value * power_lsb;
+  }
+  return result;
 }
 
 /**************************************************************************/
@@ -195,11 +220,11 @@ float INA219::busPower() const {
     @brief  Rewrites the last config register
 */
 /**************************************************************************/
-void INA219::reconfig() const {
+bool INA219::reconfig() const {
 #if (INA219_DEBUG == 1)
   Serial.print("Reconfigure with Config: 0x"); Serial.println(config,HEX);
 #endif
-  write16(CONFIG_R, config);
+  return write16(CONFIG_R, config);
 }
 
 /**************************************************************************/
@@ -207,11 +232,11 @@ void INA219::reconfig() const {
     @brief  Rewrites the last calibration
 */
 /**************************************************************************/
-void INA219::recalibrate() const {
+bool INA219::recalibrate() const {
 #if (INA219_DEBUG == 1)
   Serial.print("Recalibrate with cal: "); Serial.println(cal);
 #endif
-  write16(CAL_R, cal);
+  return write16(CAL_R, cal);
 }
 
 /**************************************************************************/
@@ -261,7 +286,7 @@ bool INA219::overflow() const {
 *             INTERNAL I2C FUNCTIONS                  *
 **********************************************************************/
 
-void INA219::write16(t_reg a, uint16_t d) const {
+bool INA219::write16(t_reg a, uint16_t d) const {
   uint8_t temp;
   temp = (uint8_t)d;
   d >>= 8;
@@ -277,11 +302,12 @@ void INA219::write16(t_reg a, uint16_t d) const {
     Wire.send(temp); // write data lobyte;
   #endif
 
-  Wire.endTransmission(); // end transmission
+  bool result = Wire.endTransmission() == 0; // end transmission
   delay(1);
+  return result;
 }
 
-int16_t INA219::read16(t_reg a) const {
+bool INA219::read16(t_reg a, int16_t *value) const {
   uint16_t ret;
 
   // move the pointer to reg. of interest, null argument
@@ -298,8 +324,8 @@ int16_t INA219::read16(t_reg a) const {
     ret <<= 8;
     ret |= Wire.receive(); // rx lo byte
   #endif
-
-  Wire.endTransmission(); // end transmission
-
-  return ret;
+  if (value) {
+    *value = ret;
+  }
+  return Wire.endTransmission() == 0; // end transmission
 }

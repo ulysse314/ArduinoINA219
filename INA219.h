@@ -115,19 +115,21 @@ class INA219
     INA219( uint8_t addr = 0x40 ///< Device address.
                );
 
+    uint8_t i2cAddress( ) const { return i2c_address; };
+
     /// Start i2 communication with actual device.
-    void begin( );
+    bool begin( );
 
     /// calibration of equations and device.
     /// default values are for a 0.25 Ohm shunt on a 5V bus with max current of 1A
-    void calibrate( float r_shunt        = D_SHUNT,         ///< Value of shunt in Ohms.
+    bool calibrate( float r_shunt        = D_SHUNT,         ///< Value of shunt in Ohms.
     		        float v_shunt_max    = D_V_SHUNT_MAX,   ///< Maximum value of voltage across shunt.
     		        float v_bus_max      = D_V_BUS_MAX,     ///< Maximum voltage of bus.
     		        float i_max_expected = D_I_MAX_EXPECTED ///< Maximum current draw of bus + shunt.
     		        );
 
     /// Config values (range, gain, bus adc, shunt adc, mode).
-    void configure( t_range range   = RANGE_32V,   ///< Range for bus voltage.
+    bool configure( t_range range   = RANGE_32V,   ///< Range for bus voltage.
     		        t_gain gain     = GAIN_8_320MV,///< Set Gain for shunt voltage.
     		        t_adc bus_adc   = ADC_12BIT,   ///< Configure bus voltage conversion.
     		        t_adc shunt_adc = ADC_12BIT,   ///< Configure shun voltage conversion.
@@ -135,34 +137,34 @@ class INA219
     		        );
 
     /// Resets the INA219.
-    void reset();
+    bool reset();
 
     /// Returns the raw binary value of the shunt voltage
-    int16_t shuntVoltageRaw() const;
+    bool shuntVoltageRaw(int16_t *value) const;
 
     /// Returns raw bus voltage binary value.
-    int16_t busVoltageRaw();
+    bool busVoltageRaw(int16_t *value);
 
     /// Returns raw current binary value.    
-    int16_t shuntCurrentRaw() const;
+    bool shuntCurrentRaw(int16_t *value) const;
 
     /// Returns the shunt voltage in volts.
-    float shuntVoltage() const;
+    bool shuntVoltage(float *value) const;
 
     /// Returns the bus voltage in volts.
-    float busVoltage();
+    bool busVoltage(float *value);
 
     /// Returns the shunt current in amps.
-    float shuntCurrent() const;
+    bool shuntCurrent(float *value) const;
 
     /// Returns the bus power in watts.
-    float busPower() const;
+    bool busPower(float *value) const;
 
     /// Rewrites last config value to INA219 register
-    void reconfig() const;
+    bool reconfig() const;
     
     /// Rewrites last calibration value to INA219 register
-    void recalibrate() const;
+    bool recalibrate() const;
     
     /// conversion is ready
     bool ready() const;
@@ -185,15 +187,15 @@ class INA219
     float r_shunt, current_lsb, power_lsb;
     uint16_t config, cal;
     bool _ready, _overflow;
-    uint16_t _bus_voltage_register;
 
     ///Read 16 word from given register address.
-    int16_t read16( t_reg addr ///< Register address.
+    bool read16( t_reg addr, ///< Register address.
+                int16_t *value
     		      ) const;
 
     /// Writes a 16-bit word (d) to register pointer (a).
     /// When selecting a register pointer to read from, (d) = 0
-    void write16( t_reg addr,   ///< Register address.
+    bool write16( t_reg addr,   ///< Register address.
     		      uint16_t data ///< Data to be writen.
     		     ) const;
 
