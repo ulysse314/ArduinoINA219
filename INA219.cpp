@@ -36,10 +36,6 @@
 
 #include "INA219.h"
 
-#if defined(ESP8266) || defined(ESP32)
-  #define _delay_ms(ms) delayMicroseconds((ms) * 1000)
-#endif
-
 #ifdef __avr__
   #include <util/delay.h>
 #endif
