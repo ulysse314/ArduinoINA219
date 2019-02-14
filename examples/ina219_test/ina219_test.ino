@@ -17,8 +17,8 @@ INA219 monitor;
 void setup()
 {
   Serial.begin(115200);
+  Wire.begin();
   bool result = monitor.begin();
-  return;
   Serial.print("Monitor begin: ");
   Serial.println(result ? "true" : "false");
   // begin calls:
