@@ -78,6 +78,9 @@ void INA219::begin() {
 void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, float i_max_expected) {
     uint16_t digits;
     float min_lsb, swap;
+#if (INA219_DEBUG == 1)
+    float max_current,max_before_overflow,max_shunt_v,max_shunt_v_before_overflow,max_power,i_max_possible,max_lsb;
+#endif
 
     r_shunt = shunt_val;
 
@@ -107,7 +110,6 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
     power_lsb = current_lsb * 20;
 
 #if (INA219_DEBUG == 1)
-      float max_current,max_before_overflow,max_shunt_v,max_shunt_v_before_overflow,max_power,i_max_possible,max_lsb;
       i_max_possible = v_shunt_max / r_shunt;
       max_lsb = i_max_expected / 4096;
       max_current = current_lsb*32767;
