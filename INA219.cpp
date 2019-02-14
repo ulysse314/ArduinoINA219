@@ -309,7 +309,7 @@ bool INA219::read16(t_reg a, int16_t *value) const {
     return false;
   }
   
-  Wire.requestFrom((int)i2c_address, 2);    // request 2 data bytes
+  Wire.requestFrom(i2c_address, 2);    // request 2 data bytes
   bool result = false;
   if (Wire.available() == 2) {
     result = true;
