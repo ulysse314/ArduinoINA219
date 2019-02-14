@@ -29,10 +29,6 @@ void setup()
 
 void loop()
 {
-  Serial.println("ttest");
-  delay(1000);
-  return;
-
   Serial.println("******************");
   
   Serial.print("raw shunt voltage: ");
