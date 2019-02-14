@@ -302,8 +302,6 @@ bool INA219::write16(t_reg a, uint16_t d) const {
 }
 
 bool INA219::read16(t_reg a, int16_t *value) const {
-  uint16_t ret;
-
   // move the pointer to reg. of interest, null argument
   if (!write16(a, 0)) {
     return false;
@@ -312,6 +310,7 @@ bool INA219::read16(t_reg a, int16_t *value) const {
   Wire.requestFrom(i2c_address, 2);    // request 2 data bytes
   bool result = false;
   if (Wire.available() == 2) {
+    uint16_t ret = 0;
     result = true;
     #if ARDUINO >= 100
       ret = Wire.read(); // rx hi byte
@@ -322,6 +321,9 @@ bool INA219::read16(t_reg a, int16_t *value) const {
       ret <<= 8;
       ret |= Wire.receive(); // rx lo byte
     #endif
+    if (value) {
+      *value = ret;
+    }
   }
   while (Wire.available() > 0) {
     #if ARDUINO >= 100
@@ -329,9 +331,6 @@ bool INA219::read16(t_reg a, int16_t *value) const {
     #else
       Wire.receive();
     #endif
-  }
-  if (value) {
-    *value = ret;
   }
   return result;
 }
