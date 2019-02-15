@@ -12,19 +12,19 @@
 * in continuous conversion mode. All reads are from continous conversions.
 *
 * A note about the gain (PGA) setting:
-*	The gain of the ADC pre-amplifier is programmable in the INA219, and can
-*	be set between 1/8x (default) and unity. This allows a shunt voltage 
-*	range of +/-320mV to +/-40mV respectively. Something to keep in mind,
-*	however, is that this change in gain DOES NOT affect the resolution
-*	of the ADC, which is fixed at 1uV. What it does do is increase noise
-*	immunity by exploiting the integrative nature of the delta-sigma ADC.
-*	For the best possible reading, you should set the gain to the range
-*	of voltages that you expect to see in your particular circuit. See
-*	page 15 in the datasheet for more info about the PGA.
+* The gain of the ADC pre-amplifier is programmable in the INA219, and can
+* be set between 1/8x (default) and unity. This allows a shunt voltage 
+* range of +/-320mV to +/-40mV respectively. Something to keep in mind,
+* however, is that this change in gain DOES NOT affect the resolution
+* of the ADC, which is fixed at 1uV. What it does do is increase noise
+* immunity by exploiting the integrative nature of the delta-sigma ADC.
+* For the best possible reading, you should set the gain to the range
+* of voltages that you expect to see in your particular circuit. See
+* page 15 in the datasheet for more info about the PGA.
 *
 * Known bugs:
 *     * may return unreliable values if not connected to a bus or at
-*	bus currents below 10uA.
+* bus currents below 10uA.
 *
 * Arduino 1.0 compatible as of 6/6/2012
 *
@@ -44,21 +44,21 @@
 
 namespace{
 // config. register bit labels
-const uint8_t RST       = 15;
-const uint8_t BRNG      = 13;
-const uint8_t PG1       = 12;
-const uint8_t PG0       = 11;
-const uint8_t BADC4     = 10;
-const uint8_t BADC3	= 9;
-const uint8_t BADC2	= 8;
-const uint8_t BADC1	= 7;
-const uint8_t SADC4	= 6;
-const uint8_t SADC3	= 5;
-const uint8_t SADC2	= 4;
-const uint8_t SADC1	= 3;
-const uint8_t MODE3	= 2;
-const uint8_t MODE2	= 1;
-const uint8_t MODE1	= 0;
+const uint8_t RST   = 15;
+const uint8_t BRNG  = 13;
+const uint8_t PG1   = 12;
+const uint8_t PG0   = 11;
+const uint8_t BADC4 = 10;
+const uint8_t BADC3 = 9;
+const uint8_t BADC2 = 8;
+const uint8_t BADC1 = 7;
+const uint8_t SADC4 = 6;
+const uint8_t SADC3 = 5;
+const uint8_t SADC2 = 4;
+const uint8_t SADC1 = 3;
+const uint8_t MODE3 = 2;
+const uint8_t MODE2 = 1;
+const uint8_t MODE1 = 0;
 };
 
 #define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R 
@@ -88,16 +88,16 @@ bool INA219::calibrate(float shunt_val, float i_max_expected) {
 
     /* From datasheet: This value was selected to be a round number near the Minimum_LSB.
      * This selection allows for good resolution with a rounded LSB.
-	   * eg. 0.000610 -> 0.000700
-	   */
+     * eg. 0.000610 -> 0.000700
+     */
     while( _current_lsb > 0.0 ){//If zero there is something weird...
         if( (uint16_t)_current_lsb / 1){
-        	_current_lsb = (uint16_t) _current_lsb + 1;
-        	_current_lsb /= pow(10,digits);
-        	break;
+            _current_lsb = (uint16_t) _current_lsb + 1;
+            _current_lsb /= pow(10,digits);
+            break;
         }
         else{
-        	digits++;
+            digits++;
             _current_lsb *= 10.0;
         }
     };

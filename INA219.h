@@ -103,7 +103,7 @@ class INA219
     
     ///Constructor
     INA219( uint8_t addr = 0x40 ///< Device address.
-               );
+            );
     INA219(TwoWire *i2c, uint8_t addr = 0x40);
 
     uint8_t i2cAddress( ) const { return _i2c_address; };
@@ -114,16 +114,16 @@ class INA219
     /// calibration of equations and device.
     /// default values are for a 0.25 Ohm shunt on a 5V bus with max current of 1A
     bool calibrate( float r_shunt        = D_SHUNT,         ///< Value of shunt in Ohms.
-    		        float i_max_expected = D_I_MAX_EXPECTED ///< Maximum current draw of bus + shunt.
-    		        );
+                    float i_max_expected = D_I_MAX_EXPECTED ///< Maximum current draw of bus + shunt.
+                    );
 
     /// Config values (range, gain, bus adc, shunt adc, mode).
     bool configure( t_range range   = RANGE_32V,   ///< Range for bus voltage.
-    		        t_gain gain     = GAIN_8_320MV,///< Set Gain for shunt voltage.
-    		        t_adc bus_adc   = ADC_12BIT,   ///< Configure bus voltage conversion.
-    		        t_adc shunt_adc = ADC_12BIT,   ///< Configure shun voltage conversion.
-    		        t_mode mode     = CONT_SH_BUS  ///< Sets operation mode.
-    		        );
+                    t_gain gain     = GAIN_8_320MV,///< Set Gain for shunt voltage.
+                    t_adc bus_adc   = ADC_12BIT,   ///< Configure bus voltage conversion.
+                    t_adc shunt_adc = ADC_12BIT,   ///< Configure shun voltage conversion.
+                    t_mode mode     = CONT_SH_BUS  ///< Sets operation mode.
+                    );
 
     /// Resets the INA219.
     bool reset();
@@ -180,14 +180,14 @@ class INA219
 
     ///Read 16 word from given register address.
     bool read16( t_reg addr, ///< Register address.
-                int16_t *value
-    		      ) const;
+                 int16_t *value
+                 ) const;
 
     /// Writes a 16-bit word (d) to register pointer (a).
     /// When selecting a register pointer to read from, (d) = 0
     bool write16( t_reg addr,   ///< Register address.
-    		      uint16_t data ///< Data to be writen.
-    		     ) const;
+                  uint16_t data ///< Data to be writen.
+                  ) const;
 
 };
 
