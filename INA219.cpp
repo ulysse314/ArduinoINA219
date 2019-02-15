@@ -65,7 +65,10 @@ const uint8_t MODE1	= 0;
 #define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R 
 #define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
 
-INA219::INA219(uint8_t addr): _i2c_address(addr), _r_shunt(0), _current_lsb(0), _power_lsb(0), _config(0), _cal(0), _ready(false), _overflow(false) {
+INA219::INA219(uint8_t addr) : INA219(&Wire, addr) {
+}
+
+INA219::INA219(TwoWire *i2c, uint8_t addr): _i2c(i2c), _i2c_address(addr), _r_shunt(0), _current_lsb(0), _power_lsb(0), _config(0), _cal(0), _ready(false), _overflow(false) {
 }
 
 bool INA219::begin() {
@@ -272,11 +275,11 @@ bool INA219::write16(t_reg a, uint16_t d) const {
   uint8_t temp;
   temp = (uint8_t)d;
   d >>= 8;
-  Wire.beginTransmission(_i2c_address); // start transmission to device
-  Wire.write(a); // sends register address to read from
-  Wire.write((uint8_t)d);  // write data hibyte
-  Wire.write(temp); // write data lobyte;
-  bool result = Wire.endTransmission() == 0; // end transmission
+  _i2c->beginTransmission(_i2c_address); // start transmission to device
+  _i2c->write(a); // sends register address to read from
+  _i2c->write((uint8_t)d);  // write data hibyte
+  _i2c->write(temp); // write data lobyte;
+  bool result = _i2c->endTransmission() == 0; // end transmission
   delay(1);
   return result;
 }
@@ -287,20 +290,20 @@ bool INA219::read16(t_reg a, int16_t *value) const {
     return false;
   }
   
-  Wire.requestFrom(_i2c_address, 2);    // request 2 data bytes
+  _i2c->requestFrom(_i2c_address, 2);    // request 2 data bytes
   bool result = false;
-  if (Wire.available() == 2) {
+  if (_i2c->available() == 2) {
     uint16_t ret = 0;
     result = true;
-    ret = Wire.read(); // rx hi byte
+    ret = _i2c->read(); // rx hi byte
     ret <<= 8;
-    ret |= Wire.read(); // rx lo byte
+    ret |= _i2c->read(); // rx lo byte
     if (value) {
       *value = ret;
     }
   }
-  while (Wire.available() > 0) {
-    Wire.read();
+  while (_i2c->available() > 0) {
+    _i2c->read();
   }
   return result;
 }

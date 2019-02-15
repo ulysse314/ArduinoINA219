@@ -104,6 +104,7 @@ class INA219
     ///Constructor
     INA219( uint8_t addr = 0x40 ///< Device address.
                );
+    INA219(TwoWire *i2c, uint8_t addr = 0x40);
 
     uint8_t i2cAddress( ) const { return _i2c_address; };
 
@@ -171,6 +172,7 @@ class INA219
         CAL_R     = 0x05     ///< calibration register.
     };
 
+    TwoWire *const _i2c;
     const uint8_t  _i2c_address;
     float _r_shunt, _current_lsb, _power_lsb;
     uint16_t _config, _cal;
