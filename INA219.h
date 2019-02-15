@@ -105,7 +105,7 @@ class INA219
     INA219( uint8_t addr = 0x40 ///< Device address.
                );
 
-    uint8_t i2cAddress( ) const { return i2c_address; };
+    uint8_t i2cAddress( ) const { return _i2c_address; };
 
     /// Start i2 communication with actual device.
     bool begin( );
@@ -171,9 +171,9 @@ class INA219
         CAL_R     = 0x05     ///< calibration register.
     };
 
-    const uint8_t  i2c_address;
-    float r_shunt, current_lsb, power_lsb;
-    uint16_t config, cal;
+    const uint8_t  _i2c_address;
+    float _r_shunt, _current_lsb, _power_lsb;
+    uint16_t _config, _cal;
     bool _ready, _overflow;
 
     ///Read 16 word from given register address.
