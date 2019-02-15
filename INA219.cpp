@@ -153,7 +153,7 @@ bool INA219::shuntVoltageRaw(int16_t *value) const {
 
 bool INA219::shuntVoltage(float *voltage) const {
   int16_t value;
-  bool result = read16(V_SHUNT_R, &value);
+  bool result = shuntVoltageRaw(&value);
   if (voltage) {
     *voltage = ((float)value / 100000);
   }
@@ -170,7 +170,6 @@ bool INA219::busVoltageRaw(int16_t *value) {
   }
   return result;
 }
-
 
 bool INA219::busVoltage(float *voltage) {
   int16_t value;
@@ -193,7 +192,7 @@ bool INA219::shuntCurrentRaw(int16_t *current) const {
 
 bool INA219::shuntCurrent(float *current) const {
   int16_t value;
-  bool result = read16(I_SHUNT_R, &value);
+  bool result = shuntCurrentRaw(&value);
   if (current) {
     *current = value * current_lsb;
   }
