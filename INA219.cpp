@@ -155,7 +155,7 @@ bool INA219::shuntVoltage(float *voltage) const {
   int16_t value;
   bool result = read16(V_SHUNT_R, &value);
   if (voltage) {
-    *voltage = (value / 100000);
+    *voltage = ((float)value / 100000);
   }
   return result;
 }
