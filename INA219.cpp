@@ -275,17 +275,9 @@ bool INA219::write16(t_reg a, uint16_t d) const {
   temp = (uint8_t)d;
   d >>= 8;
   Wire.beginTransmission(i2c_address); // start transmission to device
-
-  #if ARDUINO >= 100
-    Wire.write(a); // sends register address to read from
-    Wire.write((uint8_t)d);  // write data hibyte 
-    Wire.write(temp); // write data lobyte;
-  #else
-    Wire.send(a); // sends register address to read from
-    Wire.send((uint8_t)d);  // write data hibyte 
-    Wire.send(temp); // write data lobyte;
-  #endif
-
+  Wire.write(a); // sends register address to read from
+  Wire.write((uint8_t)d);  // write data hibyte
+  Wire.write(temp); // write data lobyte;
   bool result = Wire.endTransmission() == 0; // end transmission
   delay(1);
   return result;
@@ -302,25 +294,15 @@ bool INA219::read16(t_reg a, int16_t *value) const {
   if (Wire.available() == 2) {
     uint16_t ret = 0;
     result = true;
-    #if ARDUINO >= 100
-      ret = Wire.read(); // rx hi byte
-      ret <<= 8;
-      ret |= Wire.read(); // rx lo byte
-    #else
-      ret = Wire.receive(); // rx hi byte
-      ret <<= 8;
-      ret |= Wire.receive(); // rx lo byte
-    #endif
+    ret = Wire.read(); // rx hi byte
+    ret <<= 8;
+    ret |= Wire.read(); // rx lo byte
     if (value) {
       *value = ret;
     }
   }
   while (Wire.available() > 0) {
-    #if ARDUINO >= 100
-      Wire.read();
-    #else
-      Wire.receive();
-    #endif
+    Wire.read();
   }
   return result;
 }
