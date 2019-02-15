@@ -63,6 +63,7 @@ const uint8_t MODE1	= 0;
 
 #define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R 
 #define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R 
+#define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
 
 INA219::INA219(uint8_t addr): i2c_address(addr) {
 }
@@ -131,8 +132,7 @@ bool INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc sh
   return write16(CONFIG_R, config);
 }
 
-#define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
-bool INA219::reset(){
+bool INA219::reset() {
   bool result = write16(CONFIG_R, INA_RESET);
   delay(5);
   return result;
