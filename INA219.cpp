@@ -167,7 +167,7 @@ bool INA219::busVoltage(float *voltage) {
   bool result = busVoltageRaw(&value);
   if (voltage) {
     value >>= 3;
-    *voltage = (value * 0.004);
+    *voltage = ((float)value * 0.004);
   }
   return result;
 }
@@ -185,7 +185,7 @@ bool INA219::shuntCurrent(float *current) const {
   int16_t value;
   bool result = shuntCurrentRaw(&value);
   if (current) {
-    *current = value * current_lsb;
+    *current = (float)value * current_lsb;
   }
   return result;
 }
@@ -194,7 +194,7 @@ bool INA219::busPower(float *voltage) const {
   int16_t value;
   bool result = read16(P_BUS_R, &value);
   if (voltage) {
-    *voltage = value * power_lsb;
+    *voltage = (float)value * power_lsb;
   }
   return result;
 }
