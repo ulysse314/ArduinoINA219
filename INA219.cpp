@@ -13,7 +13,7 @@
 *
 * A note about the gain (PGA) setting:
 * The gain of the ADC pre-amplifier is programmable in the INA219, and can
-* be set between 1/8x (default) and unity. This allows a shunt voltage 
+* be set between 1/8x (default) and unity. This allows a shunt voltage
 * range of +/-320mV to +/-40mV respectively. Something to keep in mind,
 * however, is that this change in gain DOES NOT affect the resolution
 * of the ADC, which is fixed at 1uV. What it does do is increase noise
@@ -61,8 +61,8 @@ const uint8_t MODE2 = 1;
 const uint8_t MODE1 = 0;
 };
 
-#define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R 
-#define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R 
+#define CNVR_B 1  // conversion ready bit in bus voltage register V_BUS_R
+#define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R
 #define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
 
 INA219::INA219(uint8_t addr) : INA219(&Wire, addr) {
@@ -201,7 +201,7 @@ bool INA219::busPower(float *voltage) const {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Rewrites the last config register
 */
 /**************************************************************************/
@@ -213,7 +213,7 @@ bool INA219::reconfig() const {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  Rewrites the last calibration
 */
 /**************************************************************************/
@@ -225,20 +225,20 @@ bool INA219::recalibrate() const {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  returns conversion ready bite from last bus voltage read
-    
+
     @note page 30:
           Although the data from the last conversion can be read at any time,
           the INA219 Conversion Ready bit (CNVR) indicates when data from
           a conversion is available in the data output registers.
-          The CNVR bit is set after all conversions, averaging, 
+          The CNVR bit is set after all conversions, averaging,
           and multiplications are complete.
           CNVR will clear under the following conditions:
-          1.) Writing a new mode into the Operating Mode bits in the 
+          1.) Writing a new mode into the Operating Mode bits in the
               Configuration Register (except for Power-Down or Disable)
           2.) Reading the Power Register
-          
+
           page 15:
           The Conversion Ready bit clears under these
           conditions:
@@ -255,9 +255,9 @@ bool INA219::ready() const {
 }
 
 /**************************************************************************/
-/*! 
+/*!
     @brief  returns overflow bite from last bus voltage read
-    
+
     @note The Math Overflow Flag (OVF) is set when the Power or
           Current calculations are out of range. It indicates that
           current and power data may be meaningless.
@@ -289,7 +289,7 @@ bool INA219::read16(t_reg a, int16_t *value) const {
   if (!write16(a, 0)) {
     return false;
   }
-  
+
   _i2c->requestFrom(_i2c_address, 2);    // request 2 data bytes
   bool result = false;
   if (_i2c->available() == 2) {

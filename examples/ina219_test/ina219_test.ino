@@ -28,7 +28,7 @@ void setup()
 void loop()
 {
   Serial.println("******************");
-  
+
   Serial.print("Monitor begin: ");
   Serial.println(beginResult ? "true" : "false");
   Serial.print("raw shunt voltage: ");
@@ -38,7 +38,7 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.print("raw bus voltage:   ");
   int16_t busVoltageRaw;
   if (monitor.busVoltageRaw(&busVoltageRaw)) {
@@ -46,9 +46,9 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.println("--");
-  
+
   Serial.print("shunt voltage: ");
   float shuntVoltage;
   if (monitor.shuntVoltage(&shuntVoltage)) {
@@ -57,7 +57,7 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.print("shunt current: ");
   float shuntCurrent;
   if (monitor.shuntCurrent(&shuntCurrent)) {
@@ -66,7 +66,7 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.print("bus voltage:   ");
   float busVoltage;
   if (monitor.busVoltage(&busVoltage)) {
@@ -75,7 +75,7 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.print("bus power:     ");
   float busPower;
   if (monitor.busPower(&busPower)) {
@@ -84,10 +84,10 @@ void loop()
   } else {
     Serial.println("failed");
   }
-  
+
   Serial.println(" ");
   Serial.println(" ");
-  
+
   delay(1000);
 
 }

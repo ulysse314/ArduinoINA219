@@ -100,7 +100,7 @@ class INA219
         CONT_BUS    = 6, ///<Bus Continuous.
         CONT_SH_BUS = 7  ///<Shunt and Bus, Continuous.
     };
-    
+
     ///Constructor
     INA219( uint8_t addr = 0x40 ///< Device address.
             );
@@ -134,7 +134,7 @@ class INA219
     /// Returns raw bus voltage binary value.
     bool busVoltageRaw(int16_t *value);
 
-    /// Returns raw current binary value.    
+    /// Returns raw current binary value.
     bool shuntCurrentRaw(int16_t *value) const;
 
     /// Returns the shunt voltage in volts.
@@ -151,16 +151,16 @@ class INA219
 
     /// Rewrites last config value to INA219 register
     bool reconfig() const;
-    
+
     /// Rewrites last calibration value to INA219 register
     bool recalibrate() const;
-    
+
     /// conversion is ready
     bool ready() const;
 
     /// conversion is ready
     bool overflow() const;
-    
+
   private:
     /// INA219 memory registers.
     enum t_reg{
