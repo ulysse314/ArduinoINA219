@@ -12,15 +12,13 @@
 #include <INA219.h>
 
 INA219 monitor;
-
+bool beginResult;
 
 void setup()
 {
   Serial.begin(115200);
   Wire.begin();
-  bool result = monitor.begin();
-  Serial.print("Monitor begin: ");
-  Serial.println(result ? "true" : "false");
+  beginResult = monitor.begin();
   // begin calls:
   // configure() with default values RANGE_32V, GAIN_8_320MV, ADC_12BIT, ADC_12BIT, CONT_SH_BUS
   // calibrate() with default values D_SHUNT=0.1, D_V_BUS_MAX=32, D_V_SHUNT_MAX=0.2, D_I_MAX_EXPECTED=2
@@ -31,6 +29,8 @@ void loop()
 {
   Serial.println("******************");
   
+  Serial.print("Monitor begin: ");
+  Serial.println(beginResult ? "true" : "false");
   Serial.print("raw shunt voltage: ");
   int16_t shuntVoltageRaw;
   if (monitor.shuntVoltageRaw(&shuntVoltageRaw)) {
