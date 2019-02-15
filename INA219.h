@@ -46,9 +46,6 @@
 
 #include <Wire.h>
 
-#define INA219_DEBUG 0
-
-
 // default values
 
 #define D_SHUNT            0.1

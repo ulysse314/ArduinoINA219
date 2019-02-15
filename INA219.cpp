@@ -40,6 +40,8 @@
   #include <util/delay.h>
 #endif
 
+#define INA219_DEBUG 0
+
 namespace{
 // config. register bit labels
 const uint8_t RST =	15;
