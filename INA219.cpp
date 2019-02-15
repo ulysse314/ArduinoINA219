@@ -44,11 +44,11 @@
 
 namespace{
 // config. register bit labels
-const uint8_t RST =	15;
-const uint8_t BRNG = 13;
-const uint8_t PG1 = 12;
-const uint8_t PG0 = 11;
-const uint8_t BADC4 = 10;
+const uint8_t RST       = 15;
+const uint8_t BRNG      = 13;
+const uint8_t PG1       = 12;
+const uint8_t PG0       = 11;
+const uint8_t BADC4     = 10;
 const uint8_t BADC3	= 9;
 const uint8_t BADC2	= 8;
 const uint8_t BADC1	= 7;
