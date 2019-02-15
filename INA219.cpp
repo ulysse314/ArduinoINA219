@@ -69,7 +69,7 @@ bool INA219::begin() {
     return configure() && calibrate();
 }
 
-bool INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, float i_max_expected) {
+bool INA219::calibrate(float shunt_val, float i_max_expected) {
     uint16_t digits;
     float min_lsb, swap;
 
@@ -101,19 +101,11 @@ bool INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
     power_lsb = current_lsb * 20;
 
 #if (INA219_DEBUG == 1)
-      float max_current,max_before_overflow,max_shunt_v,max_shunt_v_before_overflow,max_power,i_max_possible,max_lsb;
-      i_max_possible = v_shunt_max / r_shunt;
+      float max_current,max_lsb;
       max_lsb = i_max_expected / 4096;
       max_current = current_lsb*32767;
-      max_before_overflow =  max_current > i_max_possible?i_max_possible:max_current;
 
-      max_shunt_v = max_before_overflow*r_shunt;
-      max_shunt_v_before_overflow = max_shunt_v > v_shunt_max?v_shunt_max:max_shunt_v;
-
-      max_power = v_bus_max * max_before_overflow;
-      Serial.print("v_bus_max:     "); Serial.println(v_bus_max, 8);
-      Serial.print("v_shunt_max:   "); Serial.println(v_shunt_max, 8);
-      Serial.print("i_max_possible:        "); Serial.println(i_max_possible, 8);
+      Serial.print("max_current:        "); Serial.println(max_current, 8);
       Serial.print("i_max_expected: "); Serial.println(i_max_expected, 8);
       Serial.print("min_lsb:       "); Serial.println(min_lsb, 12);
       Serial.print("max_lsb:       "); Serial.println(max_lsb, 12);
@@ -122,9 +114,6 @@ bool INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
       Serial.println("  ");
       Serial.print("cal:           "); Serial.println(cal);
       Serial.print("r_shunt:       "); Serial.println(r_shunt, 6);
-      Serial.print("max_before_overflow:       "); Serial.println(max_before_overflow,8);
-      Serial.print("max_shunt_v_before_overflow:       "); Serial.println(max_shunt_v_before_overflow,8);
-      Serial.print("max_power:       "); Serial.println(max_power,8);
       Serial.println("  ");
 #endif
       return write16(CAL_R, cal);

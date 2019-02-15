@@ -52,8 +52,6 @@
 // default values
 
 #define D_SHUNT            0.1
-#define D_V_BUS_MAX        32
-#define D_V_SHUNT_MAX      0.2
 #define D_I_MAX_EXPECTED   2
 
 
@@ -123,8 +121,6 @@ class INA219
     /// calibration of equations and device.
     /// default values are for a 0.25 Ohm shunt on a 5V bus with max current of 1A
     bool calibrate( float r_shunt        = D_SHUNT,         ///< Value of shunt in Ohms.
-    		        float v_shunt_max    = D_V_SHUNT_MAX,   ///< Maximum value of voltage across shunt.
-    		        float v_bus_max      = D_V_BUS_MAX,     ///< Maximum voltage of bus.
     		        float i_max_expected = D_I_MAX_EXPECTED ///< Maximum current draw of bus + shunt.
     		        );
 
