@@ -123,9 +123,7 @@ bool INA219::calibrate(float shunt_val, float i_max_expected) {
 }
 
 bool INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc shunt_adc,  t_mode mode) {
-  config = 0;
-
-  config |= (range << BRNG | gain << PG0 | bus_adc << BADC1 | shunt_adc << SADC1 | mode);
+  config = (range << BRNG | gain << PG0 | bus_adc << BADC1 | shunt_adc << SADC1 | mode);
 #if (INA219_DEBUG == 1)
   Serial.print("Config: 0x"); Serial.println(config,HEX);
 #endif
