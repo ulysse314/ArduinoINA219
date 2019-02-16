@@ -68,7 +68,7 @@ class INA219
 
     ///ADC resolution (9-, 10-, 11-, or 12-bit) or set the number of samples.
     ///Same definations are used both shunt and bus adc.
-    ///Configuration register bits 3 to 6 are used for averaging results for the Shunt Voltage Register (01h).
+    ///Configuration register bits 3-6 are used for averaging results for the Shunt Voltage Register (01h).
     ///And bits 7-10 are used averaging results for the Bus Voltage Register (02h).
     /// \see t_reg
     enum t_adc{
