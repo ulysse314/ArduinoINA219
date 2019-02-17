@@ -78,6 +78,9 @@ bool INA219::begin() {
 bool INA219::calibrate(float shunt_val, float i_max_expected) {
     uint16_t digits;
     float min_lsb, swap;
+#if (INA219_DEBUG == 1)
+    float max_current,max_before_overflow,max_shunt_v,max_shunt_v_before_overflow,max_power,i_max_possible,max_lsb;
+#endif
 
     _r_shunt = shunt_val;
 
@@ -110,7 +113,6 @@ bool INA219::calibrate(float shunt_val, float i_max_expected) {
       float max_current,max_lsb;
       max_lsb = i_max_expected / 4096;
       max_current = _current_lsb*32767;
-
       Serial.print("max_current:        "); Serial.println(max_current, 8);
       Serial.print("i_max_expected: "); Serial.println(i_max_expected, 8);
       Serial.print("min_lsb:       "); Serial.println(min_lsb, 12);
