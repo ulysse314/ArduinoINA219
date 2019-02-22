@@ -300,7 +300,5 @@ int16_t INA219::read16(t_reg a) const {
     ret |= Wire.receive(); // rx lo byte
   #endif
 
-  Wire.endTransmission(); // end transmission
-
   return ret;
 }
