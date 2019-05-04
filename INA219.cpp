@@ -48,8 +48,8 @@ namespace{
 // config. register bit labels
 const uint8_t RST =	15;
 const uint8_t BRNG = 13;
-const uint8_t PGA_1 = 12;
-const uint8_t PGA_0 = 11;
+const uint8_t PG_1 = 12;
+const uint8_t PG_0 = 11;
 const uint8_t BADC4 = 10;
 const uint8_t BADC3	= 9;
 const uint8_t BADC2	= 8;
@@ -141,7 +141,7 @@ void INA219::calibrate(float shunt_val, float v_shunt_max, float v_bus_max, floa
 void INA219::configure(  t_range range,  t_gain gain,  t_adc  bus_adc,  t_adc shunt_adc,  t_mode mode) {
   config = 0;
 
-  config |= (range << BRNG | gain << PGA_0 | bus_adc << BADC1 | shunt_adc << SADC1 | mode);
+  config |= (range << BRNG | gain << PG_0 | bus_adc << BADC1 | shunt_adc << SADC1 | mode);
 #if (INA219_DEBUG == 1)
   Serial.print("Config: 0x"); Serial.println(config,HEX);
 #endif
