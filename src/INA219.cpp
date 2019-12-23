@@ -65,10 +65,16 @@ const uint8_t MODE1 = 0;
 #define OVF_B  0  // math overflow bit in bus voltage register V_BUS_R
 #define INA_RESET        0xFFFF    // send to CONFIG_R to reset unit
 
-INA219::INA219(uint8_t addr) : INA219(&Wire, addr) {
-}
-
-INA219::INA219(TwoWire *i2c, uint8_t addr): _i2c(i2c), _i2c_address(addr), _r_shunt(0), _current_lsb(0), _power_lsb(0), _config(0), _cal(0), _ready(false), _overflow(false) {
+INA219::INA219(uint8_t addr, TwoWire *i2c) :
+    _i2c(i2c),
+    _i2c_address(addr),
+    _r_shunt(0),
+    _current_lsb(0),
+    _power_lsb(0),
+    _config(0),
+    _cal(0),
+    _ready(false),
+    _overflow(false) {
 }
 
 bool INA219::begin() {

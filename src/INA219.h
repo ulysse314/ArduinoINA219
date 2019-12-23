@@ -101,10 +101,7 @@ class INA219
         CONT_SH_BUS = 7  ///<Shunt and Bus, Continuous.
     };
 
-    ///Constructor
-    INA219( uint8_t addr = 0x40 ///< Device address.
-            );
-    INA219(TwoWire *i2c, uint8_t addr = 0x40);
+    INA219(uint8_t addr = 0x40, TwoWire *i2c = &Wire);
 
     uint8_t i2cAddress( ) const { return _i2c_address; };
 
