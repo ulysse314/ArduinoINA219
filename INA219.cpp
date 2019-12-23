@@ -268,7 +268,7 @@ bool INA219::overflow() const {
 *             INTERNAL I2C FUNCTIONS                  *
 **********************************************************************/
 
-bool INA219::write16(t_reg a, uint16_t d) const {
+bool INA219::write16(t_reg a, uint16_t d, bool stop) const {
   uint8_t temp;
   temp = (uint8_t)d;
   d >>= 8;
@@ -276,7 +276,7 @@ bool INA219::write16(t_reg a, uint16_t d) const {
   _i2c->write(a); // sends register address to read from
   _i2c->write((uint8_t)d);  // write data hibyte
   _i2c->write(temp); // write data lobyte;
-  bool result = _i2c->endTransmission() == 0; // end transmission
+  bool result = _i2c->endTransmission(stop) == 0; // end transmission
   delay(1);
   return result;
 }
