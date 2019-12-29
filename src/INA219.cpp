@@ -289,7 +289,7 @@ bool INA219::write16(t_reg a, uint16_t d, bool stop) const {
 
 bool INA219::read16(t_reg a, int16_t *value) const {
   // move the pointer to reg. of interest, null argument
-  if (!write16(a, 0)) {
+  if (!write16(a, 0, false)) {
     return false;
   }
 
