@@ -198,7 +198,6 @@ class INA219
     float r_shunt, current_lsb, power_lsb;
     uint16_t config, cal;
     bool _ready, _overflow;
-    uint16_t _bus_voltage_register;
 
     ///Read 16 word from given register address.
     int16_t read16( t_reg addr ///< Register address.
