@@ -156,12 +156,12 @@ bool INA219::shuntVoltage(float *voltage) const {
 }
 
 bool INA219::busVoltageRaw(int16_t *value) {
-  int16_t busVoltageRegister;
-  bool result = read16(V_BUS_R, &busVoltageRegister);
-  _overflow = bitRead(busVoltageRegister, OVF_B);     // overflow bit
-  _ready    = bitRead(busVoltageRegister, CNVR_B);    // ready bit
+  int16_t bus_voltage_register;
+  bool result = read16(V_BUS_R, &bus_voltage_register);
+  _overflow = bitRead(bus_voltage_register, OVF_B);     // overflow bit
+  _ready    = bitRead(bus_voltage_register, CNVR_B);    // ready bit
   if (value) {
-    *value = busVoltageRegister;
+    *value = bus_voltage_register;
   }
   return result;
 }
