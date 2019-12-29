@@ -158,6 +158,9 @@ bool INA219::shuntVoltage(float *voltage) const {
 bool INA219::busVoltageRaw(int16_t *value) {
   int16_t bus_voltage_register;
   bool result = read16(V_BUS_R, &bus_voltage_register);
+  if (!result) {
+    return false;
+  }
   _overflow = bitRead(bus_voltage_register, OVF_B);     // overflow bit
   _ready    = bitRead(bus_voltage_register, CNVR_B);    // ready bit
   if (value) {
